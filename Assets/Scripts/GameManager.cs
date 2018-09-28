@@ -21,20 +21,26 @@ public class GameManager : MonoBehaviour
     public GameObject panelWalls;       // 壁全体
 
     public GameObject buttonHammer;     // ボタン：トンカチ
+    public GameObject buttonKey;        // ボタン：鍵
 
     public GameObject imageHammerIcon;  // アイコン：トンカチ
+    public GameObject imageKeyIcon;     // アイコン：鍵
 
-    public GameObject buttonMassage;        // ボタン：メッセージ
-    public GameObject buttonMassageText;    // メッセージテキスト
+    public GameObject buttonPig;        // ボタン：豚の貯金箱
+
+    public GameObject buttonMassage;    // ボタン：メッセージ
+    public GameObject buttonMassageText;// メッセージテキスト
 
     public GameObject[] buttonLamp = new GameObject[3]; // ボタン：金庫
 
     public Sprite[] buttonPicture = new Sprite[4];    // ボタンの絵
 
     public Sprite hammerPicture;            // トンカチの絵
+    public Sprite keyPicture;               // 鍵の絵
 
     private int wallNo;                     // 現在の向いている方向
-    private bool doesHaveHammer;            // トンカチを持っているか
+    private bool doesHaveHammer;            // トンカチを持っているか？
+    private bool doesHaveKey;               // 鍵を持っているか？
     private int[] buttonColor = new int[3]; // 金庫のボタン
 
     // Use this for initialization
@@ -42,6 +48,7 @@ public class GameManager : MonoBehaviour
     {
         wallNo = WALL_FRONT;            // スタート時点では「前」を向く
         doesHaveHammer = false;         // トンカチは「持っていない」
+        doesHaveKey = false;            // 鍵は「持っていない」
 
         buttonColor[0] = COLOR_GREEN;   // ボタン1の色は「緑」
         buttonColor[1] = COLOR_RED;     // ボタン2の色は「赤」
@@ -93,7 +100,7 @@ public class GameManager : MonoBehaviour
             // まだトンカチを持っていない？
             if (doesHaveHammer == false)
             {
-                DisplayMessage("金庫にトンカチが入っていた。");
+                DisplayMessage("金庫にトンカチが入っていた！");
                 buttonHammer.SetActive(true);   // トンカチの絵を表示
                 imageHammerIcon.GetComponent<Image>().sprite = hammerPicture;
 
@@ -105,13 +112,41 @@ public class GameManager : MonoBehaviour
     // メモをタップ
     public void PushButtonMemo()
     {
-        DisplayMessage("エッフェル塔と書いてある。");
+        DisplayMessage("エッフェル塔と書いてある");
+    }
+
+    // 貯金箱をタップ
+    public void PushButtonPig()
+    {
+        // トンカチを持っているか？
+        if (doesHaveHammer == false)
+        {
+            // トンカチを持っていない
+            DisplayMessage("素ででは割れない");
+        }
+        else
+        {
+            // トンカチを持っている
+            DisplayMessage("貯金箱が割れて中から鍵が出てきた！");
+
+            buttonPig.SetActive(false);
+            buttonKey.SetActive(true);
+            imageKeyIcon.GetComponent<Image>().sprite = keyPicture;
+
+            doesHaveKey = true;
+        }
     }
 
     // トンカチの絵をタップ
     public void PushButtonHammer()
     {
         buttonHammer.SetActive(false);
+    }
+
+    // 鍵の絵をタップ
+    public void PushButtonKey()
+    {
+        buttonKey.SetActive(false);
     }
 
     // メッセージをタップ
@@ -130,6 +165,7 @@ public class GameManager : MonoBehaviour
             wallNo = WALL_FRONT;
         }
         DisplayWall();  // 壁表示更新
+        ClearButtons(); // いらない物を消す
     }
 
     // 左(<)ボタンを押した
@@ -142,6 +178,15 @@ public class GameManager : MonoBehaviour
             wallNo = WALL_LEFT;
         }
         DisplayWall();  // 壁表示更新
+        ClearButtons(); // いらない物を消す
+    }
+
+    // 各種表示をクリア
+    void ClearButtons()
+    {
+        buttonHammer.SetActive(false);
+        buttonKey.SetActive(false);
+        buttonMassage.SetActive(false);
     }
 
     // メッセージを表示
