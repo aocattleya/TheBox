@@ -16,8 +16,8 @@
 - Android
 
 ## 環境
-- Unity Personal  
-- VisualStudio2017 Community  
+- Unity2018.2.8f1 Personal
+- VisualStudio2017 Community
 
 ## Git管理
 - SourceTree
